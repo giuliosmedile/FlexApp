@@ -1,37 +1,66 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import React from "react";
+import {
+  Appbar,
+  MD3LightTheme as DefaultTheme,
+  withTheme,
+} from "react-native-paper";
+import HomeScreen from "./HomeScreen";
+import SettingsScreen from "./SettingsScreen";
+import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { NavigationContainer } from "@react-navigation/native";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
+  const Tab = createMaterialBottomTabNavigator();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <NavigationContainer independent={true}>
+      <Appbar.Header elevated={true} style={{ elevation: 2 }}>
+        <Appbar.Content title="FlexApp" titleStyle={{ fontWeight: "bold" }} />
+      </Appbar.Header>
+      <Tab.Navigator
+        initialRouteName="HomeScreen"
+        activeColor="#e91e63"
+        screenOptions={({ route }) => ({
+          tabBarLabel: route.name,
+          elevation: 2,
+        })}
+      >
+        <Tab.Screen
+          name="HomeScreen"
+          component={HomeScreen}
+          options={{
+            tabBarLabel: "Home",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="home" color={color} size={26} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="SettingsScreen"
+          component={SettingsScreen}
+          options={{
+            tabBarLabel: "Settings",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="cog" color={color} size={26} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Stats"
+          component={SettingsScreen}
+          options={{
+            tabBarLabel: "Statistiche",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons
+                name="trending-up"
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
