@@ -9,6 +9,7 @@ import SettingsScreen from "./SettingsScreen";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { NavigationContainer } from "@react-navigation/native";
+import ChartScreen from "./ChartScreen";
 
 export default function RootLayout() {
   const Tab = createMaterialBottomTabNavigator();
@@ -48,7 +49,7 @@ export default function RootLayout() {
         />
         <Tab.Screen
           name="Stats"
-          component={SettingsScreen}
+          component={ChartScreen}
           options={{
             tabBarLabel: "Statistiche",
             tabBarIcon: ({ color }) => (
